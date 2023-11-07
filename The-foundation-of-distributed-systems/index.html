@@ -1,0 +1,956 @@
+
+
+<!DOCTYPE html>
+<html lang="zh-CN" data-default-color-scheme=auto>
+
+
+
+<head>
+  <meta charset="UTF-8">
+  <link rel="apple-touch-icon" sizes="76x76" href="/img/avatar.jpg">
+  <link rel="icon" href="/img/avatar.jpg">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, shrink-to-fit=no">
+  <meta http-equiv="x-ua-compatible" content="ie=edge">
+  
+  <meta name="theme-color" content="#2f4154">
+  <meta name="author" content="hhunag">
+  <meta name="keywords" content="">
+  
+    <meta name="description" content="分布式系统基础一、分布式系统的目标这是十分重要的概念，这个目标是我们搭建分布式系统的过程中始终遵循的。实际上，分布式系统提供的最本质功能就是这个目标本身——提供一个抽象，这个抽象将分布式系统之下的复杂性都隐藏起来。  具体来说，系统暴露出来的抽象服务应该具有良好的API、良好的功能，底层具体实现对用户透明无感，用户只需要关注这个抽象即可体验系统提供的各种好处，即用户只需要按照抽象使用系统即可。 实">
+<meta property="og:type" content="article">
+<meta property="og:title" content="分布式系统基础">
+<meta property="og:url" content="http://hhuang1231.github.io/The-foundation-of-distributed-systems/index.html">
+<meta property="og:site_name" content="hhunag&#39;s thought">
+<meta property="og:description" content="分布式系统基础一、分布式系统的目标这是十分重要的概念，这个目标是我们搭建分布式系统的过程中始终遵循的。实际上，分布式系统提供的最本质功能就是这个目标本身——提供一个抽象，这个抽象将分布式系统之下的复杂性都隐藏起来。  具体来说，系统暴露出来的抽象服务应该具有良好的API、良好的功能，底层具体实现对用户透明无感，用户只需要关注这个抽象即可体验系统提供的各种好处，即用户只需要按照抽象使用系统即可。 实">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="http://hhuang1231.github.io/assets-%E5%88%86%E5%B8%83%E5%BC%8F%E7%B3%BB%E7%BB%9F%E5%9F%BA%E7%A1%80/image-20231024222851019.png">
+<meta property="article:published_time" content="2023-11-07T15:44:54.000Z">
+<meta property="article:modified_time" content="2023-11-07T15:48:18.447Z">
+<meta property="article:author" content="hhunag">
+<meta property="article:tag" content="分布式">
+<meta property="article:tag" content="可扩展性">
+<meta property="article:tag" content="可靠性">
+<meta property="article:tag" content="一致性">
+<meta property="article:tag" content="可维护性">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:image" content="http://hhuang1231.github.io/assets-%E5%88%86%E5%B8%83%E5%BC%8F%E7%B3%BB%E7%BB%9F%E5%9F%BA%E7%A1%80/image-20231024222851019.png">
+  
+  
+  
+  <title>分布式系统基础 - hhunag&#39;s thought</title>
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/twitter-bootstrap/4.6.1/css/bootstrap.min.css" />
+
+
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/github-markdown-css/4.0.0/github-markdown.min.css" />
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/hint.css/2.7.0/hint.min.css" />
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/fancybox/3.5.7/jquery.fancybox.min.css" />
+
+
+
+<!-- 主题依赖的图标库，不要自行修改 -->
+<!-- Do not modify the link that theme dependent icons -->
+
+<link rel="stylesheet" href="//at.alicdn.com/t/font_1749284_hj8rtnfg7um.css">
+
+
+
+<link rel="stylesheet" href="//at.alicdn.com/t/font_1736178_lbnruvf0jn.css">
+
+
+<link  rel="stylesheet" href="/css/main.css" />
+
+
+  <link id="highlight-css" rel="stylesheet" href="/css/highlight.css" />
+  
+    <link id="highlight-css-dark" rel="stylesheet" href="/css/highlight-dark.css" />
+  
+
+
+
+
+  <script id="fluid-configs">
+    var Fluid = window.Fluid || {};
+    Fluid.ctx = Object.assign({}, Fluid.ctx)
+    var CONFIG = {"hostname":"hhuang1231.github.io","root":"/","version":"1.9.5","typing":{"enable":true,"typeSpeed":70,"cursorChar":"_","loop":false,"scope":[]},"anchorjs":{"enable":true,"element":"h1,h2,h3,h4,h5,h6","placement":"left","visible":"hover","icon":""},"progressbar":{"enable":true,"height_px":3,"color":"#29d","options":{"showSpinner":false,"trickleSpeed":100}},"code_language":{"enable":true,"default":"TEXT"},"copy_btn":true,"image_caption":{"enable":true},"image_zoom":{"enable":true,"img_url_replace":["",""]},"toc":{"enable":true,"placement":"right","headingSelector":"h1,h2,h3,h4,h5,h6","collapseDepth":0},"lazyload":{"enable":true,"loading_img":"/img/loading.gif","onlypost":false,"offset_factor":2},"web_analytics":{"enable":true,"follow_dnt":true,"baidu":null,"google":{"measurement_id":null},"tencent":{"sid":null,"cid":null},"woyaola":null,"cnzz":null,"leancloud":{"app_id":"h2pB4EboiXaH4e69bRDBLe0K-9Nh9j0Va","app_key":"0SBxc18QwTgG4ueuzdZOeHKK","server_url":"https://h2pb4ebo.lc-cn-e1-shared.com","path":"window.location.pathname","ignore_local":true}},"search_path":"/local-search.xml","include_content_in_search":true};
+
+    if (CONFIG.web_analytics.follow_dnt) {
+      var dntVal = navigator.doNotTrack || window.doNotTrack || navigator.msDoNotTrack;
+      Fluid.ctx.dnt = dntVal && (dntVal.startsWith('1') || dntVal.startsWith('yes') || dntVal.startsWith('on'));
+    }
+  </script>
+  <script  src="/js/utils.js" ></script>
+  <script  src="/js/color-schema.js" ></script>
+  
+
+  
+
+  
+    <!-- Google tag (gtag.js) -->
+    <script async>
+      if (!Fluid.ctx.dnt) {
+        Fluid.utils.createScript("https://www.googletagmanager.com/gtag/js?id=", function() {
+          window.dataLayer = window.dataLayer || [];
+          function gtag() {
+            dataLayer.push(arguments);
+          }
+          gtag('js', new Date());
+          gtag('config', '');
+        });
+      }
+    </script>
+  
+
+  
+
+  
+
+  
+
+  
+    
+  
+
+
+
+  
+<meta name="generator" content="Hexo 6.3.0"></head>
+
+
+<body>
+  
+
+  <header>
+    
+
+<div class="header-inner" style="height: 70vh;">
+  <nav id="navbar" class="navbar fixed-top  navbar-expand-lg navbar-dark scrolling-navbar">
+  <div class="container">
+    <a class="navbar-brand" href="/">
+      <strong>hhunag&#39;s thought</strong>
+    </a>
+
+    <button id="navbar-toggler-btn" class="navbar-toggler" type="button" data-toggle="collapse"
+            data-target="#navbarSupportedContent"
+            aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+      <div class="animated-icon"><span></span><span></span><span></span></div>
+    </button>
+
+    <!-- Collapsible content -->
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+      <ul class="navbar-nav ml-auto text-center">
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/">
+                <i class="iconfont icon-home-fill"></i>
+                <span>首页</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/archives/">
+                <i class="iconfont icon-archive-fill"></i>
+                <span>归档</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/categories/">
+                <i class="iconfont icon-category-fill"></i>
+                <span>分类</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/tags/">
+                <i class="iconfont icon-tags-fill"></i>
+                <span>标签</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/Recommended-Reading/">
+                <i class="iconfont icon-books"></i>
+                <span>推荐</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/about/">
+                <i class="iconfont icon-user-fill"></i>
+                <span>关于</span>
+              </a>
+            </li>
+          
+        
+        
+          <li class="nav-item" id="search-btn">
+            <a class="nav-link" target="_self" href="javascript:;" data-toggle="modal" data-target="#modalSearch" aria-label="Search">
+              <i class="iconfont icon-search"></i>
+            </a>
+          </li>
+          
+        
+        
+          <li class="nav-item" id="color-toggle-btn">
+            <a class="nav-link" target="_self" href="javascript:;" aria-label="Color Toggle">
+              <i class="iconfont icon-dark" id="color-toggle-icon"></i>
+            </a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+</nav>
+
+  
+
+<div id="banner" class="banner" parallax=true
+     style="background: url('/img/%E4%BB%99%E5%89%91%E9%97%AE%E6%83%85%E5%A5%B3%E7%A5%9E.jpg') no-repeat center center; background-size: cover;">
+  <div class="full-bg-img">
+    <div class="mask flex-center" style="background-color: rgba(0, 0, 0, 0.3)">
+      <div class="banner-text text-center fade-in-up">
+        <div class="h2">
+          
+            <span id="subtitle" data-typed-text="分布式系统基础"></span>
+          
+        </div>
+
+        
+          
+  <div class="mt-3">
+    
+    
+      <span class="post-meta">
+        <i class="iconfont icon-date-fill" aria-hidden="true"></i>
+        <time datetime="2023-11-07 23:44" pubdate>
+          2023年11月7日 晚上
+        </time>
+      </span>
+    
+  </div>
+
+  <div class="mt-1">
+    
+      <span class="post-meta mr-2">
+        <i class="iconfont icon-chart"></i>
+        
+          7.1k 字
+        
+      </span>
+    
+
+    
+      <span class="post-meta mr-2">
+        <i class="iconfont icon-clock-fill"></i>
+        
+        
+        
+          15 分钟
+        
+      </span>
+    
+
+    
+    
+      
+        <span id="leancloud-page-views-container" class="post-meta" style="display: none">
+          <i class="iconfont icon-eye" aria-hidden="true"></i>
+          <span id="leancloud-page-views"></span> 次
+        </span>
+        
+      
+    
+  </div>
+
+
+        
+      </div>
+
+      
+    </div>
+  </div>
+</div>
+
+</div>
+
+  </header>
+
+  <main>
+    
+      
+
+<div class="container-fluid nopadding-x">
+  <div class="row nomargin-x">
+    <div class="side-col d-none d-lg-block col-lg-2">
+      
+
+    </div>
+
+    <div class="col-lg-8 nopadding-x-md">
+      <div class="container nopadding-x-md" id="board-ctn">
+        <div id="board">
+          <article class="post-content mx-auto">
+            <h1 id="seo-header">分布式系统基础</h1>
+            
+              <p class="note note-info">
+                
+                  
+                    本文最后更新于：2023年11月7日 晚上
+                  
+                
+              </p>
+            
+            
+              <div class="markdown-body">
+                
+                <h1 id="分布式系统基础"><a href="#分布式系统基础" class="headerlink" title="分布式系统基础"></a>分布式系统基础</h1><h2 id="一、分布式系统的目标"><a href="#一、分布式系统的目标" class="headerlink" title="一、分布式系统的目标"></a>一、分布式系统的目标</h2><p>这是十分重要的概念，这个目标是我们搭建分布式系统的过程中始终遵循的。实际上，分布式系统提供的最本质功能就是这个目标本身——<strong>提供一个抽象，这个抽象将分布式系统之下的复杂性都隐藏起来</strong>。</p>
+<ul>
+<li>具体来说，系统暴露出来的抽象服务应该具有良好的API、良好的功能，底层具体实现对用户透明无感，用户只需要关注这个抽象即可体验系统提供的各种好处，即用户只需要按照抽象使用系统即可。</li>
+<li>实现分布式系统的工作流程就是尽可能地隐藏实现细节，将完成一个功能所需要地所有代码下沉到系统底部，而不是告知用户应该怎么调用我这个系统提供的一堆API来完成一个功能。例如你使用电脑不需要关心操作系统如何将数据存入到内存或者磁盘，上网不需要关心数据怎么传到另一台主机上。</li>
+</ul>
+<blockquote>
+<p>学习思考：</p>
+<ul>
+<li><p>个人觉得分布式在刚入门学习的时候，尽量理解各种概念的本质，而不是被表面现象所迷惑。因为在学习过程中我常看见许多不同的名词，但实际上琢磨琢磨就感觉它们想表达的意思上又是一致的。只要能够总结总结，那么化作自己的知识就会是很容易的的一件事情。</p>
+</li>
+<li><p>另一个要说的就是，别太学术派了，别总是持有某些知识名词肯定具有权威说法，然后自己就要按照那套标准来学习（曾经的我就是这样的，死读书的经典表现）。到了现在这个阶段（自己品味是啥阶段），一定要懂得换另一个角度进行思考，即抱着解决问题的想法去学习。对于学习分布式系统也一样，能够领悟到其中的精髓，然后搭建起一个可以完成需求的系统那么就说明学精学透了（当然这将需要花费大量时间进行学习）。不过业内的一些标准说法还是要注意的，例如负载均衡就负载均衡，别整出奇奇怪怪的名词出来让人贻笑大方了。</p>
+</li>
+<li><p>再往功能方面讲，我觉得分布式这一块是百花齐放、百家争鸣的，只要想满足自己需求，那么就可以自由扩展，做得好的话可以开源出来共享，或者直接发个论文都可以。</p>
+</li>
+</ul>
+</blockquote>
+<h2 id="二、基础设施-Infrastructure"><a href="#二、基础设施-Infrastructure" class="headerlink" title="二、基础设施 Infrastructure"></a>二、基础设施 Infrastructure</h2><p>基础设施可以看作是分布式系统的体系结构，一个最简单最基础的结构就是：</p>
+<ul>
+<li>通信infrastructure作为系统的最底层组件，</li>
+<li>而存储infrastructure和计算infrastructure将在其之上发挥作用，</li>
+<li>各个机器之间通过通信infrastructure间接连接起存储infrastructure或者计算infrastructure。</li>
+</ul>
+<p><img src="/./assets-%E5%88%86%E5%B8%83%E5%BC%8F%E7%B3%BB%E7%BB%9F%E5%9F%BA%E7%A1%80/image-20231024222851019.png" srcset="/img/loading.gif" lazyload alt="image-20231024222851019"></p>
+<h3 id="1-通信"><a href="#1-通信" class="headerlink" title="1 通信"></a>1 通信</h3><p>最最基础的设施就是通信infrastructure，通信能力是分布式系统必不可少的一环，<strong>有了通信能力才能将各个独立的机器联系为一个整体，从而实现本文后续提到的可扩展性、可靠性等等话题</strong>。</p>
+<p>在分布式系统中，通信实现方式一般都是RPC，但是这是为什么呢？为什么不采用TCP或者HTTP等其他协议？其实答案就在于先前提到的分布式系统目标。</p>
+<ul>
+<li>众所周知，RPC底层可以使用TCP或者HTTP协议，因此RCP自然而言的继承了这些协议提供的好处。</li>
+<li>除此之外，更多的RPC类库一般会实现更多有用的功能，例如高性能的序列化和反序列化。</li>
+<li>而实际上最重要的是，对于使用TCP、HTTP通信作为底层机制的话，我们就需要手动编写socket、手动编解码等等处理，而RPC，从诞生以来，就是为了解决远程无感调用的问题。<strong>各个RPC类库将自动隐藏通信细节，我们直接调用即可</strong>。</li>
+</ul>
+<blockquote>
+<p>不过很想吐槽的是，它们好像就是概念不一样罢了，实际上对TCP套个壳，封装提供个简单使用的API就可以说是RPC了。所以实现起来倒也不是很复杂。总之上面的道理其实很简单，也很清晰，为的就是隐藏复杂性。接下来的各种实现本质上和这里的分析差不多，都是套个壳罢了。</p>
+<p>或者再深入一点就是远程方法调用，实现一个注册中心用于推送服务以及订阅服务，然后在客户端中实现Stub来进行方法调用（动态）代理。</p>
+</blockquote>
+<p>当然我们不可能只是简单调用RPC类库就可以实现适用于分布式系统的通信infrastructure了。</p>
+<ul>
+<li>因为在分布式系统种，不可避免的会遇见各种问题，例如磁盘故障、内存挤满、网线被断、电源被踢了一脚、操作系统崩溃等。</li>
+<li>这些事情也许在几年时间都不会发生，但是对于一个具有成千上百机器的系统来说，只要你肯定数学家的贡献，那么你就应该相信，<strong>在概率分布的情况下，这些可能在个人电脑上不会出现的问题，在分布式系统中将会是一个再常见不过的情况。于是通信实际上是不可靠的</strong>。</li>
+</ul>
+<h3 id="2-存储与计算"><a href="#2-存储与计算" class="headerlink" title="2 存储与计算"></a>2 存储与计算</h3><p>而另外的两种重要部分实际上是存储infrastructure和计算infrastructure，也可以称为I&#x2F;O密集型或数据密集型、CPU密集型或计算密集型。基本上我们都是在通信infrastructure的基础之上，针对我们应用的需求来选择搭建数据密集型或者计算密集型分布式系统。</p>
+<blockquote>
+<p>虽然将数据和计算置于同一机器的系统也是存在的，例如早期的MapReduce系统。<strong>但是如今的趋势是将数据和计算分离，从而提高可用、自由扩展、便于维护等等。</strong><br>例如目前有很多中间件都采用了计算与存储分离的架构，例如kafka和pulsar就分离出CPU密集型的系统作为协调者来保证对I&#x2F;O密集型系统的容错性、数据一致性以及系统对外请求响应的编排。而不是将其耦合在一起，让单个系统负担太多</p>
+</blockquote>
+<ul>
+<li>对于CPU密集型系统来说，因为CPU密集型一般来说都是不存储数据的系统（也可以称之为无状态的系统），它主要聚焦于计算能力，那么理论上分布式系统提供的可扩展性就可以保证在机器趋于无穷多是，计算能力也能够趋于无穷大。<blockquote>
+<p>这也是为什么要求日常开发的业务都应该保证是无状态服务</p>
+</blockquote>
+</li>
+<li>对于I&#x2F;O密集型来说，由于需要存储大量数据，所以数据一致性问题就尤为重要，如果用户得到的数据不一致，那么就算整个分布式系统拥有完美的容错机制，也是不可能上线使用的。</li>
+</ul>
+<h2 id="三、四大话题-Topic"><a href="#三、四大话题-Topic" class="headerlink" title="三、四大话题 Topic"></a>三、四大话题 Topic</h2><p>在以上infrastructure的学习中，提到了实现中需要注意的诸多细节，而这些细节实际上都是围绕这以下四个话题展开的。当学习完以下四个话题，自然而然会对实现细节或者目标有更加深刻的理解。</p>
+<h3 id="1-可扩展性-Scalability"><a href="#1-可扩展性-Scalability" class="headerlink" title="1 可扩展性 Scalability"></a>1 可扩展性 Scalability</h3><p>对于可扩展性来说，实际上是在探究如何处理负载的问题，即如何通过添加资源来处理额外的负载。</p>
+<ul>
+<li><p><strong>负载参数</strong>的来源多种多样，取决于系统应用的体系结构是怎么样的。经典的参数有rt，qps，tps，pv uv，cache hit等等。</p>
+</li>
+<li><p><strong>评估性能</strong>的标准一般采用百分比，而不是平均值。百分比能够直观的体现有多少client能够处于指定阈值之内。而平均值则恰恰丧失了这种直观体现，因为它将系统看作整体，而不是一个个独立的client。</p>
+</li>
+</ul>
+<blockquote>
+<p>延迟和响应时间是两个不同的概念，后者包含前者。</p>
+</blockquote>
+<p>了解了负载参数和评判标准后，就可以考虑如何实现可扩展性，换句话说，就是学习如何将计算资源分配给机器，从而提升负载能力、平衡系统负载。</p>
+<ul>
+<li>对于可扩展性设计来说，实际上是一门<strong>平衡的艺术</strong>。在设计系统架构时，必须要考虑应用的定位、需求是什么，对于快速迭代的应用来说，也许在设计之初的架构和迭代几轮后的架构完全不同。对于刚刚起步的应用来说，快速迭代扩展业务、吸引用户才是一等公民，不应该将未知的扩展性放在首位。<blockquote>
+<p>不过需要注意的是，对于一个普通的系统来说，基本上是难以支持其预设目标的10倍负载的。因此如果应用处于一个快速迭代并且可能存在大量潜在流量的阶段，那么就还是需要考虑是否需要设计一个高扩展性（以便自由提升性能）、高伸缩性（在不需要大量资源时，避免浪费）的系统。</p>
+</blockquote>
+</li>
+</ul>
+<p>对于具有可扩展性的系统来说，<strong>在增加其负载能力时，也间接的提高了系统的可靠性</strong>，因为随着机器处理能力的提升，故障出现的概率将会减少(例如不会出现负载过高，而无法提供服务的情况)，所以此时将提升系统的可用性。</p>
+<h3 id="2-可靠性-Reliability"><a href="#2-可靠性-Reliability" class="headerlink" title="2 可靠性 Reliability"></a>2 可靠性 Reliability</h3><p>可靠性即要求系统能够提供容错机制（fault-tolerant），而容错当中又可分出两个属性，<strong>可用性（Availability）和恢复性（Recoverability）</strong>。</p>
+<p>故障（fault）会出现两种情况，一是继续可用，只不过不能输出正常结果，另一种是不可用。</p>
+<ul>
+<li>对于继续可用，而输出不正确情况来说(这和降级修改输出不一样，它是由于被动造成意外输出的，所以需要进行失败处理)，我们就应该让他<strong>快速失败（fail fast）策略</strong>使其不可用。</li>
+<li>对于不可用的情况，一般来说为了保证高可用性，一般是将负载转移到另一台能够提供相同功能的机器上，即执行<strong>故障转移&#x2F;故障恢复策略</strong></li>
+<li>但是我们也需要考虑将这台故障机器修复重启的策略，这也是为什么需要保证系统需要拥有恢复性。<blockquote>
+<p>故障转移和故障恢复都是一个意思，即failover。</p>
+</blockquote>
+</li>
+</ul>
+<p>故障又会分为三类，一是硬件，二是软件，三是人为。具体情况就不展开讨论了。</p>
+<p>接下来思考以下如何实现容错机制。</p>
+<ul>
+<li><p>首先考虑如何保证通信基础设施的具有容错，毕竟从硬件上来说，指不定什么时候网线就被拔了、硬盘被挤满了，从软件上来说，也不知道应用是否能够正确接收并响应我们的请求。 而对于通信infrastructure来说，<strong>最简单有效的办法就是发送心跳检测数据包，也有一种说法是探针技术</strong>。接下来简单讲述一下，到时候再另出一篇文章详细讲讲。</p>
+<ul>
+<li><p>心跳检测有两个作用，一是检测机器是否宕机、二是检测机器是否可用。</p>
+</li>
+<li><p>心跳检测是基于重传和超时机制，</p>
+<blockquote>
+<p>分布式系统中，最重要的机制中超时和重传占据很大地位。它是通信infrastructure的利器，是实现可靠性不可缺少的一部分，同时一致性也将依赖于超时和重传来实现，并进而确保可靠性。</p>
+</blockquote>
+</li>
+</ul>
+</li>
+<li><p>对于计算infrastructure来说，那么其实依靠着通信infrastructure提供的容错性，计算infrastructure也能够享受通信可靠性这一好事，就如那些依赖于TCP的应用层协议那样，它们享受着TCP带来的可靠性、流量控制、拥塞控制等好处。</p>
+<ul>
+<li>但是仅仅依赖与通信infrastructure并不能解决所有问题，应该故障并不是只出现在通信中。另一个简单的办法就是提供冗余机器，也可称复制（replication）。如果它是一个无状态应用，那么当机器故障时，直接转移到其他能够完成工作的机器即可。<strong>但对于那些具有一定状态、数据的应用来说，就需要考虑一致性问题</strong>。</li>
+</ul>
+<blockquote>
+<p>注意，TCP中的可靠性和分布式系统中的可靠性是不一样的，前者提供的是报文的不丢、不重、保序，而后者则包含本小节涉及到的内容。</p>
+</blockquote>
+</li>
+<li><p>对于存储infrastructure来说，与计算infrastructure的讨论差不多，即将数据复制一份到另一台机器上就可以提供相同功能。但它必须要考虑一致性问题。</p>
+</li>
+</ul>
+<p>对于复制这个机制会导致系统出现一致性的问题，实际上是分布式系统中最重要的Topic之一——一致性。实际上这个问题在多个领域都会出现，例如一个经典使用就是缓存，它被用在操作系统、计算机网络、业务开发、CPU、磁盘等等位置。</p>
+<blockquote>
+<p>我个人理解的可靠性是比较宽泛的，即任何偏离正常轨迹运行的机器我都称之为不可靠。如果按我这个标准来理解的话，那么一致性实际上是可靠性的一个子话题。</p>
+</blockquote>
+<h3 id="3-一致性-Consistency"><a href="#3-一致性-Consistency" class="headerlink" title="3 一致性 Consistency"></a>3 一致性 Consistency</h3><p>一致性话题主要在于对于多个参与者来说，他们拥有的数据是一样的、一致性。对于分布式领域中提到的一致性来说，<strong>它更主要是解决数据由于延迟而造成的不一致</strong>。</p>
+<p>一致性这个名词实际上会涉及到很多不同的领域:</p>
+<ul>
+<li>对于数据复制来说，一般使用的是异步模型，因此这里将要强调的是最终一致性。又例如在CAP这个经验法则中，就有一个consistency，这里指的是强一致性。<blockquote>
+<p>CAP对于帮助理解分布式系统十分有用，因为它将分布式中不可靠的问题简单的总结为了三个方面，并且给出了十分有用的AP、CP结论。但是对于搭建一个可靠的分布系统来说，它并没有太多用处。我们需要更加严谨的、分门别类的一致性模型来辅助我们构建一个能够完成我们需求的分布式系统。</p>
+</blockquote>
+</li>
+<li>对于事务来说，其中的ACID又涉及到consistency，但是这里的一致性和上述的一致性所提及的概念实际上是不一致性的。<ul>
+<li><p>它指的是对于每一个事务来说，它应该保证事务提交之后，数据应该是完整明确的，不应该违反任何约束，进而导致数据库的不可用。换句话说，就是让数据库从一个有效状态转移到另一个有效状态。一致可以理解为——状态从头到尾都一样，都是有效的。</p>
+</li>
+<li><p>对于事务的一致性来说，它和数据库本身的关系并不大，该属性的实现更多的是依赖于应用层。换句话说，应用层有义务保证数据能够满足约束条件。例如你不能让余额变成负数。</p>
+</li>
+<li><p>而且对于许多约束来说，数据库也许能够利用本身自带的约束机制或者存储过程等方式来实现，但是这将会给数据库中添加更多的逻辑，反而使得整个系统的职责分散，最终将会导致维护性的下降。可维护性也是下一个将要介绍的Topic之一。并且数据库自带的机制实际上并不够完善，例如存储过程，每个数据库所暴露的API都有所不同，语义一般也晦涩难懂，这也不利于系统的可维护性。</p>
+</li>
+<li><p>还有一点需要注意的是，数据库添加逻辑，可能会导致数据库的负载增加，而众所周知，数据库的资源是十分珍贵的，我们不应该降低其性能。</p>
+<blockquote>
+<p>Joe Hellerstein曾经在文献中评论，字母C只是为了使ACID这个缩略词听起来更为顺口，当时并非觉得这是件很重要的事情</p>
+</blockquote>
+</li>
+</ul>
+</li>
+</ul>
+<p>除开以上两种——事务、分布式——一致性，其实还有一种一致性概念，就是哈希一致性，它强调的是，多次哈希得到的都是相同的结果。这个一致性在此不做关注。</p>
+<p>在这方面，我们需要额外关注以下内容：</p>
+<ul>
+<li>同步&#x2F;异步的网络模型</li>
+<li>节点失效处理方式</li>
+<li>顺序性</li>
+<li>分布式共识（原子提交&#x2F;分布式事务、容错性共识算法）</li>
+</ul>
+<h3 id="4-可维护性-Maintainability"><a href="#4-可维护性-Maintainability" class="headerlink" title="4 可维护性 Maintainability"></a>4 可维护性 Maintainability</h3><blockquote>
+<p>俗话说的好，一个软件的生命周期大多都处于维护阶段，开发时间仅仅占据很小一部分，因此若想让一个软件能够进入生产环境，可维护性是一定需要考虑的。</p>
+</blockquote>
+<p>可维护性包括三部分：可运维性、简单性、可伸缩性</p>
+<ul>
+<li><p>对于可运维性来说，可以选择实现的功能还是很多的，对于这方面还是以后再说吧~~</p>
+<p>  但先赋上一段有用的知识：</p>
+<blockquote>
+<p>如何监控各种指标？</p>
+<ul>
+<li>需要持续收集某段<strong>时间窗口</strong>(滑动窗口)中的指标，</li>
+<li>然后通过指标滚动计算<strong>百分比</strong>。（例如p50、p95、p99、p999等等等，而不是平均值）<ul>
+<li>计算的简单方式可以是每隔一段时间进行排序，但这样做开销大，</li>
+<li>实践中可以采用<strong>近似算法来降低cpu和内存的开销</strong>。</li>
+</ul>
+</li>
+<li>并且要使用<strong>直方图</strong>来展示指标数据</li>
+</ul>
+</blockquote>
+</li>
+<li><p>简洁性和分布式系统的最终目标是不谋而合的。简单来说，当我们提供了一个高度抽象时，就可以满足简单性和我们的最终目标了。</p>
+<ul>
+<li>在可维护性层面来讲，一个良好的抽象，能够帮助我们易于理解系统架构，同时可重用组件，从而避免重复造轮子，在系统中引入越来越多不确定因素进而出现错误。</li>
+<li>同时如果一个系统越来越复杂，越来越臃肿，那么整个系统的开发效率也将越来越慢，且增加运维成本。</li>
+</ul>
+</li>
+<li><p>可伸缩性也是十分重要的一个方面。该话题实际上是敏捷开发，快速迭代产品必须考虑的。</p>
+<ul>
+<li>而也不难发现，如果我们的系统具有简洁性，那么将有助于我们实现可伸缩性。</li>
+<li>除此之外，如果有一个具有高度抽象的类库能够让我们开箱即用，那么实际上我们也自由尝试引入，以适应我们不同的场景需求。</li>
+</ul>
+</li>
+</ul>
+<p>**在可维护性层面上，实际上我们已经几乎要脱离分布式底层构建，而开始转向用户体验方面之上了(运维人员也是用户)**，因此在讨论这一话题时，我们就能够十分明显的感受到分布式系统最终目标是多么的重要。</p>
+<h3 id="5-总结"><a href="#5-总结" class="headerlink" title="5 总结"></a>5 总结</h3><h4 id="5-1-回顾四个Topic"><a href="#5-1-回顾四个Topic" class="headerlink" title="5.1 回顾四个Topic"></a>5.1 回顾四个Topic</h4><p>在我看来，这四个大话题，实际上最重要的是可靠性和可扩展性，我认为它们确确实实适用于各种类型的分布式系统。我个人认为一致性对于那些无状态应用来说是不需要考虑的，但它是数据系统中必不可少的Topic。</p>
+<blockquote>
+<p>虽然但是，一点状态都没有的应用实际上也不存在。对于Web开发来说，不管以何种架构来设计系统，一定会涉及到数据，典型的场景就是缓存的使用。而且对于今日的分布式系统来说，数据是必不可缺的，那么一致性也是不能够缺少的。</p>
+<p>实际上，分布式系统实现起来最难的部分也就是既要保证可靠性又要保证一致性。时至今日这也是一个值得深入研究讨论的话题。</p>
+</blockquote>
+<p>而对于可维护性来说，实际上我认为它更加倾向那些有生产需求的系统去实现可维护性，例如Web开发。如果仅仅是想实现一个简单可用的分布式系统，我个人认为是没必要考虑这些事情的。</p>
+<blockquote>
+<p>学习分布式系统有什么用？</p>
+<ul>
+<li>它能够帮助我们开发一个中间件或者类似于什么运维系统、数据系统等等，又或者说某些辅助搭建分布式系统的框架。</li>
+<li>它还有一个最重要的作用其实是帮助我们让各种应用组合落地，例如将业务系统与MySQL、Redis、ElasticSearch、MQ组合起来。其实当我们组合各种应用时，我们的系统也就能够看做是分布式系统了，而如果此时不懂得如何搭建分布式系统，不知如何处理分布式重可能出现的问题，那么我们搭建的应用是不能够进入生产的。</li>
+<li>而回到最终目标的话，那么实际上我们此时就是在向使用我们系统应用的用户提供一个良好的体验(提供抽象，隐藏细节)</li>
+</ul>
+</blockquote>
+<p>在实际构建系统的过程中，我们大多数可以按以上四个话题为角度来进行思考。分布式系统应该是灵活的，应该根据自己的需求调整处理优先级。</p>
+<p><strong>再次强调——在我们实现对应能力时，其实就是在拓展infrastructure向外提供的抽象能力。而我们需要保证的就是这些能力足以隐藏实现细节，做到对用户透明无感，开箱即用。</strong></p>
+<h4 id="5-2-Topic之下的应用"><a href="#5-2-Topic之下的应用" class="headerlink" title="5.2 Topic之下的应用"></a>5.2 Topic之下的应用</h4><p>对于分布式系统来说，主要话题就是以上提到的四个，而围绕着这四个话题，将会引出很多机制 策略 算法，在以上的论述中，都只是简单的了解一下。因此接下来我将会尽力补充那些细节，例如负载均衡，消息可靠性，数据分区，数据保序，事务，降级等等。而这些内容我将在今后学习，并记录下来。</p>
+
+                
+              </div>
+            
+            <hr/>
+            <div>
+              <div class="post-metas my-3">
+  
+    <div class="post-meta mr-3 d-flex align-items-center">
+      <i class="iconfont icon-category"></i>
+      
+
+<span class="category-chains">
+  
+  
+    
+      <span class="category-chain">
+        
+  <a href="/categories/%E5%88%86%E5%B8%83%E5%BC%8F/" class="category-chain-item">分布式</a>
+  
+  
+
+      </span>
+    
+  
+</span>
+
+    </div>
+  
+  
+    <div class="post-meta">
+      <i class="iconfont icon-tags"></i>
+      
+        <a href="/tags/%E5%88%86%E5%B8%83%E5%BC%8F/" class="print-no-link">#分布式</a>
+      
+        <a href="/tags/%E5%8F%AF%E6%89%A9%E5%B1%95%E6%80%A7/" class="print-no-link">#可扩展性</a>
+      
+        <a href="/tags/%E5%8F%AF%E9%9D%A0%E6%80%A7/" class="print-no-link">#可靠性</a>
+      
+        <a href="/tags/%E4%B8%80%E8%87%B4%E6%80%A7/" class="print-no-link">#一致性</a>
+      
+        <a href="/tags/%E5%8F%AF%E7%BB%B4%E6%8A%A4%E6%80%A7/" class="print-no-link">#可维护性</a>
+      
+    </div>
+  
+</div>
+
+
+              
+  
+
+  <div class="license-box my-3">
+    <div class="license-title">
+      <div>分布式系统基础</div>
+      <div>http://hhuang1231.github.io/The-foundation-of-distributed-systems/</div>
+    </div>
+    <div class="license-meta">
+      
+        <div class="license-meta-item">
+          <div>作者</div>
+          <div>hhunag</div>
+        </div>
+      
+      
+        <div class="license-meta-item license-meta-date">
+          <div>发布于</div>
+          <div>2023年11月7日</div>
+        </div>
+      
+      
+        <div class="license-meta-item license-meta-date">
+          <div>更新于</div>
+          <div>2023年11月7日</div>
+        </div>
+      
+      
+        <div class="license-meta-item">
+          <div>许可协议</div>
+          <div>
+            
+              
+              
+                <a class="print-no-link" target="_blank" href="https://creativecommons.org/licenses/by/4.0/">
+                  <span class="hint--top hint--rounded" aria-label="BY - 署名">
+                    <i class="iconfont icon-by"></i>
+                  </span>
+                </a>
+              
+            
+          </div>
+        </div>
+      
+    </div>
+    <div class="license-icon iconfont"></div>
+  </div>
+
+
+
+              
+                <div class="post-prevnext my-3">
+                  <article class="post-prev col-6">
+                    
+                    
+                  </article>
+                  <article class="post-next col-6">
+                    
+                    
+                  </article>
+                </div>
+              
+            </div>
+
+            
+  
+  
+    <article id="comments" lazyload>
+      
+  <div id="valine"></div>
+  <script type="text/javascript">
+    Fluid.utils.loadComments('#valine', function() {
+      Fluid.utils.createScript('https://lib.baomitu.com/valine/1.5.1/Valine.min.js', function() {
+        var options = Object.assign(
+          {"appId":"h2pB4EboiXaH4e69bRDBLe0K-9Nh9j0Va","appKey":"0SBxc18QwTgG4ueuzdZOeHKK","path":"window.location.pathname","placeholder":"欢迎讨论~","avatar":"retro","meta":["nick","mail"],"requiredFields":["nick"],"pageSize":10,"lang":"zh-CN","highlight":true,"recordIP":false,"serverURLs":"https://h2pb4ebo.lc-cn-e1-shared.com","emojiCDN":null,"emojiMaps":null,"enableQQ":false},
+          {
+            el: "#valine",
+            path: window.location.pathname
+          }
+        )
+        new Valine(options);
+        Fluid.utils.waitElementVisible('#valine .vcontent', () => {
+          var imgSelector = '#valine .vcontent img:not(.vemoji)';
+          Fluid.plugins.imageCaption(imgSelector);
+          Fluid.plugins.fancyBox(imgSelector);
+        })
+      });
+    });
+  </script>
+  <noscript>Please enable JavaScript to view the comments</noscript>
+
+
+    </article>
+  
+
+
+          </article>
+        </div>
+      </div>
+    </div>
+
+    <div class="side-col d-none d-lg-block col-lg-2">
+      
+  <aside class="sidebar" style="margin-left: -1rem">
+    <div id="toc">
+  <p class="toc-header">
+    <i class="iconfont icon-list"></i>
+    <span>目录</span>
+  </p>
+  <div class="toc-body" id="toc-body"></div>
+</div>
+
+
+
+  </aside>
+
+
+    </div>
+  </div>
+</div>
+
+
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+
+
+
+
+    
+
+    
+      <a id="scroll-top-button" aria-label="TOP" href="#" role="button">
+        <i class="iconfont icon-arrowup" aria-hidden="true"></i>
+      </a>
+    
+
+    
+      <div class="modal fade" id="modalSearch" tabindex="-1" role="dialog" aria-labelledby="ModalLabel"
+     aria-hidden="true">
+  <div class="modal-dialog modal-dialog-scrollable modal-lg" role="document">
+    <div class="modal-content">
+      <div class="modal-header text-center">
+        <h4 class="modal-title w-100 font-weight-bold">搜索</h4>
+        <button type="button" id="local-search-close" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body mx-3">
+        <div class="md-form mb-5">
+          <input type="text" id="local-search-input" class="form-control validate">
+          <label data-error="x" data-success="v" for="local-search-input">关键词</label>
+        </div>
+        <div class="list-group" id="local-search-result"></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+    
+
+    
+  </main>
+
+  <footer>
+    <div class="footer-inner">
+  
+    <div class="footer-content">
+       <a href="https://hexo.io" target="_blank" rel="nofollow noopener"><span>Hexo</span></a> <i class="iconfont icon-love"></i> <a href="https://github.com/fluid-dev/hexo-theme-fluid" target="_blank" rel="nofollow noopener"><span>Fluid</span></a> <br/> <a href="https://github.com/hhuang1231" target="_blank" class: "iconfont icon-github-fill"><span>hhuang Github</span></a> 
+    </div>
+  
+  
+    <div class="statistics">
+  
+  
+
+  
+    
+      <span id="leancloud-site-pv-container" style="display: none">
+        总访问量 
+        <span id="leancloud-site-pv"></span>
+         次
+      </span>
+    
+    
+      <span id="leancloud-site-uv-container" style="display: none">
+        总访客数 
+        <span id="leancloud-site-uv"></span>
+         人
+      </span>
+    
+    
+
+  
+</div>
+
+  
+  
+  
+</div>
+
+  </footer>
+
+  <!-- Scripts -->
+  
+  <script  src="https://lib.baomitu.com/nprogress/0.2.0/nprogress.min.js" ></script>
+  <link  rel="stylesheet" href="https://lib.baomitu.com/nprogress/0.2.0/nprogress.min.css" />
+
+  <script>
+    NProgress.configure({"showSpinner":false,"trickleSpeed":100})
+    NProgress.start()
+    window.addEventListener('load', function() {
+      NProgress.done();
+    })
+  </script>
+
+
+<script  src="https://lib.baomitu.com/jquery/3.6.4/jquery.min.js" ></script>
+<script  src="https://lib.baomitu.com/twitter-bootstrap/4.6.1/js/bootstrap.min.js" ></script>
+<script  src="/js/events.js" ></script>
+<script  src="/js/plugins.js" ></script>
+
+
+  <script  src="https://lib.baomitu.com/typed.js/2.0.12/typed.min.js" ></script>
+  <script>
+    (function (window, document) {
+      var typing = Fluid.plugins.typing;
+      var subtitle = document.getElementById('subtitle');
+      if (!subtitle || !typing) {
+        return;
+      }
+      var text = subtitle.getAttribute('data-typed-text');
+      
+        typing(text);
+      
+    })(window, document);
+  </script>
+
+
+
+
+  
+    <script  src="/js/img-lazyload.js" ></script>
+  
+
+
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/tocbot/4.20.1/tocbot.min.js', function() {
+    var toc = jQuery('#toc');
+    if (toc.length === 0 || !window.tocbot) { return; }
+    var boardCtn = jQuery('#board-ctn');
+    var boardTop = boardCtn.offset().top;
+
+    window.tocbot.init(Object.assign({
+      tocSelector     : '#toc-body',
+      contentSelector : '.markdown-body',
+      linkClass       : 'tocbot-link',
+      activeLinkClass : 'tocbot-active-link',
+      listClass       : 'tocbot-list',
+      isCollapsedClass: 'tocbot-is-collapsed',
+      collapsibleClass: 'tocbot-is-collapsible',
+      scrollSmooth    : true,
+      includeTitleTags: true,
+      headingsOffset  : -boardTop,
+    }, CONFIG.toc));
+    if (toc.find('.toc-list-item').length > 0) {
+      toc.css('visibility', 'visible');
+    }
+
+    Fluid.events.registerRefreshCallback(function() {
+      if ('tocbot' in window) {
+        tocbot.refresh();
+        var toc = jQuery('#toc');
+        if (toc.length === 0 || !tocbot) {
+          return;
+        }
+        if (toc.find('.toc-list-item').length > 0) {
+          toc.css('visibility', 'visible');
+        }
+      }
+    });
+  });
+</script>
+
+
+  <script src=https://lib.baomitu.com/clipboard.js/2.0.11/clipboard.min.js></script>
+
+  <script>Fluid.plugins.codeWidget();</script>
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/anchor-js/4.3.1/anchor.min.js', function() {
+    window.anchors.options = {
+      placement: CONFIG.anchorjs.placement,
+      visible  : CONFIG.anchorjs.visible
+    };
+    if (CONFIG.anchorjs.icon) {
+      window.anchors.options.icon = CONFIG.anchorjs.icon;
+    }
+    var el = (CONFIG.anchorjs.element || 'h1,h2,h3,h4,h5,h6').split(',');
+    var res = [];
+    for (var item of el) {
+      res.push('.markdown-body > ' + item.trim());
+    }
+    if (CONFIG.anchorjs.placement === 'left') {
+      window.anchors.options.class = 'anchorjs-link-left';
+    }
+    window.anchors.add(res.join(', '));
+
+    Fluid.events.registerRefreshCallback(function() {
+      if ('anchors' in window) {
+        anchors.removeAll();
+        var el = (CONFIG.anchorjs.element || 'h1,h2,h3,h4,h5,h6').split(',');
+        var res = [];
+        for (var item of el) {
+          res.push('.markdown-body > ' + item.trim());
+        }
+        if (CONFIG.anchorjs.placement === 'left') {
+          anchors.options.class = 'anchorjs-link-left';
+        }
+        anchors.add(res.join(', '));
+      }
+    });
+  });
+</script>
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/fancybox/3.5.7/jquery.fancybox.min.js', function() {
+    Fluid.plugins.fancyBox();
+  });
+</script>
+
+
+  <script>Fluid.plugins.imageCaption();</script>
+
+  <script defer src="/js/leancloud.js" ></script>
+
+  <script  src="/js/local-search.js" ></script>
+
+
+
+
+
+<!-- 主题的启动项，将它保持在最底部 -->
+<!-- the boot of the theme, keep it at the bottom -->
+<script  src="/js/boot.js" ></script>
+
+
+  
+
+  <noscript>
+    <div class="noscript-warning">博客在允许 JavaScript 运行的环境下浏览效果更佳</div>
+  </noscript>
+</body>
+</html>
