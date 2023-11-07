@@ -23,9 +23,9 @@
 <meta property="og:site_name" content="hhunag&#39;s thought">
 <meta property="og:description" content="分布式系统基础一、分布式系统的目标这是十分重要的概念，这个目标是我们搭建分布式系统的过程中始终遵循的。实际上，分布式系统提供的最本质功能就是这个目标本身——提供一个抽象，这个抽象将分布式系统之下的复杂性都隐藏起来。  具体来说，系统暴露出来的抽象服务应该具有良好的API、良好的功能，底层具体实现对用户透明无感，用户只需要关注这个抽象即可体验系统提供的各种好处，即用户只需要按照抽象使用系统即可。 实">
 <meta property="og:locale" content="zh_CN">
-<meta property="og:image" content="http://hhuang1231.github.io/assets-%E5%88%86%E5%B8%83%E5%BC%8F%E7%B3%BB%E7%BB%9F%E5%9F%BA%E7%A1%80/image-20231024222851019.png">
-<meta property="article:published_time" content="2023-11-07T15:44:54.000Z">
-<meta property="article:modified_time" content="2023-11-07T15:48:18.447Z">
+<meta property="og:image" content="http://hhuang1231.github.io/The-foundation-of-distributed-systems/image-20231024222851019.png">
+<meta property="article:published_time" content="2023-11-07T16:16:59.000Z">
+<meta property="article:modified_time" content="2023-11-07T16:25:25.936Z">
 <meta property="article:author" content="hhunag">
 <meta property="article:tag" content="分布式">
 <meta property="article:tag" content="可扩展性">
@@ -33,7 +33,7 @@
 <meta property="article:tag" content="一致性">
 <meta property="article:tag" content="可维护性">
 <meta name="twitter:card" content="summary_large_image">
-<meta name="twitter:image" content="http://hhuang1231.github.io/assets-%E5%88%86%E5%B8%83%E5%BC%8F%E7%B3%BB%E7%BB%9F%E5%9F%BA%E7%A1%80/image-20231024222851019.png">
+<meta name="twitter:image" content="http://hhuang1231.github.io/The-foundation-of-distributed-systems/image-20231024222851019.png">
   
   
   
@@ -255,8 +255,8 @@
     
       <span class="post-meta">
         <i class="iconfont icon-date-fill" aria-hidden="true"></i>
-        <time datetime="2023-11-07 23:44" pubdate>
-          2023年11月7日 晚上
+        <time datetime="2023-11-08 00:16" pubdate>
+          2023年11月8日 凌晨
         </time>
       </span>
     
@@ -267,7 +267,7 @@
       <span class="post-meta mr-2">
         <i class="iconfont icon-chart"></i>
         
-          7.1k 字
+          7k 字
         
       </span>
     
@@ -328,7 +328,7 @@
               <p class="note note-info">
                 
                   
-                    本文最后更新于：2023年11月7日 晚上
+                    本文最后更新于：2023年11月8日 凌晨
                   
                 
               </p>
@@ -336,7 +336,7 @@
             
               <div class="markdown-body">
                 
-                <h1 id="分布式系统基础"><a href="#分布式系统基础" class="headerlink" title="分布式系统基础"></a>分布式系统基础</h1><h2 id="一、分布式系统的目标"><a href="#一、分布式系统的目标" class="headerlink" title="一、分布式系统的目标"></a>一、分布式系统的目标</h2><p>这是十分重要的概念，这个目标是我们搭建分布式系统的过程中始终遵循的。实际上，分布式系统提供的最本质功能就是这个目标本身——<strong>提供一个抽象，这个抽象将分布式系统之下的复杂性都隐藏起来</strong>。</p>
+                <h1 id="分布式系统基础"><a title="分布式系统基础" class="headerlink" href="#分布式系统基础"></a>分布式系统基础</h1><h2 id="一、分布式系统的目标"><a title="一、分布式系统的目标" class="headerlink" href="#一、分布式系统的目标"></a>一、分布式系统的目标</h2><p>这是十分重要的概念，这个目标是我们搭建分布式系统的过程中始终遵循的。实际上，分布式系统提供的最本质功能就是这个目标本身——<strong>提供一个抽象，这个抽象将分布式系统之下的复杂性都隐藏起来</strong>。</p>
 <ul>
 <li>具体来说，系统暴露出来的抽象服务应该具有良好的API、良好的功能，底层具体实现对用户透明无感，用户只需要关注这个抽象即可体验系统提供的各种好处，即用户只需要按照抽象使用系统即可。</li>
 <li>实现分布式系统的工作流程就是尽可能地隐藏实现细节，将完成一个功能所需要地所有代码下沉到系统底部，而不是告知用户应该怎么调用我这个系统提供的一堆API来完成一个功能。例如你使用电脑不需要关心操作系统如何将数据存入到内存或者磁盘，上网不需要关心数据怎么传到另一台主机上。</li>
@@ -352,14 +352,14 @@
 </li>
 </ul>
 </blockquote>
-<h2 id="二、基础设施-Infrastructure"><a href="#二、基础设施-Infrastructure" class="headerlink" title="二、基础设施 Infrastructure"></a>二、基础设施 Infrastructure</h2><p>基础设施可以看作是分布式系统的体系结构，一个最简单最基础的结构就是：</p>
+<h2 id="二、基础设施-Infrastructure"><a title="二、基础设施 Infrastructure" class="headerlink" href="#二、基础设施-Infrastructure"></a>二、基础设施 Infrastructure</h2><p>基础设施可以看作是分布式系统的体系结构，一个最简单最基础的结构就是：</p>
 <ul>
 <li>通信infrastructure作为系统的最底层组件，</li>
 <li>而存储infrastructure和计算infrastructure将在其之上发挥作用，</li>
 <li>各个机器之间通过通信infrastructure间接连接起存储infrastructure或者计算infrastructure。</li>
 </ul>
-<p><img src="/./assets-%E5%88%86%E5%B8%83%E5%BC%8F%E7%B3%BB%E7%BB%9F%E5%9F%BA%E7%A1%80/image-20231024222851019.png" srcset="/img/loading.gif" lazyload alt="image-20231024222851019"></p>
-<h3 id="1-通信"><a href="#1-通信" class="headerlink" title="1 通信"></a>1 通信</h3><p>最最基础的设施就是通信infrastructure，通信能力是分布式系统必不可少的一环，<strong>有了通信能力才能将各个独立的机器联系为一个整体，从而实现本文后续提到的可扩展性、可靠性等等话题</strong>。</p>
+<p><img alt="image-20231024222851019" src="/The-foundation-of-distributed-systems/image-20231024222851019.png" srcset="/img/loading.gif" lazyload></p>
+<h3 id="1-通信"><a title="1 通信" class="headerlink" href="#1-通信"></a>1 通信</h3><p>最最基础的设施就是通信infrastructure，通信能力是分布式系统必不可少的一环，<strong>有了通信能力才能将各个独立的机器联系为一个整体，从而实现本文后续提到的可扩展性、可靠性等等话题</strong>。</p>
 <p>在分布式系统中，通信实现方式一般都是RPC，但是这是为什么呢？为什么不采用TCP或者HTTP等其他协议？其实答案就在于先前提到的分布式系统目标。</p>
 <ul>
 <li>众所周知，RPC底层可以使用TCP或者HTTP协议，因此RCP自然而言的继承了这些协议提供的好处。</li>
@@ -375,19 +375,21 @@
 <li>因为在分布式系统种，不可避免的会遇见各种问题，例如磁盘故障、内存挤满、网线被断、电源被踢了一脚、操作系统崩溃等。</li>
 <li>这些事情也许在几年时间都不会发生，但是对于一个具有成千上百机器的系统来说，只要你肯定数学家的贡献，那么你就应该相信，<strong>在概率分布的情况下，这些可能在个人电脑上不会出现的问题，在分布式系统中将会是一个再常见不过的情况。于是通信实际上是不可靠的</strong>。</li>
 </ul>
-<h3 id="2-存储与计算"><a href="#2-存储与计算" class="headerlink" title="2 存储与计算"></a>2 存储与计算</h3><p>而另外的两种重要部分实际上是存储infrastructure和计算infrastructure，也可以称为I&#x2F;O密集型或数据密集型、CPU密集型或计算密集型。基本上我们都是在通信infrastructure的基础之上，针对我们应用的需求来选择搭建数据密集型或者计算密集型分布式系统。</p>
+<h3 id="2-存储与计算"><a title="2 存储与计算" class="headerlink" href="#2-存储与计算"></a>2 存储与计算</h3><p>而另外的两种重要部分实际上是存储infrastructure和计算infrastructure，也可以称为I/O密集型或数据密集型、CPU密集型或计算密集型。基本上我们都是在通信infrastructure的基础之上，针对我们应用的需求来选择搭建数据密集型或者计算密集型分布式系统。</p>
 <blockquote>
-<p>虽然将数据和计算置于同一机器的系统也是存在的，例如早期的MapReduce系统。<strong>但是如今的趋势是将数据和计算分离，从而提高可用、自由扩展、便于维护等等。</strong><br>例如目前有很多中间件都采用了计算与存储分离的架构，例如kafka和pulsar就分离出CPU密集型的系统作为协调者来保证对I&#x2F;O密集型系统的容错性、数据一致性以及系统对外请求响应的编排。而不是将其耦合在一起，让单个系统负担太多</p>
+<p>虽然将数据和计算置于同一机器的系统也是存在的，例如早期的MapReduce系统。<strong>但是如今的趋势是将数据和计算分离，从而提高可用、自由扩展、便于维护等等。</strong><br>例如目前有很多中间件都采用了计算与存储分离的架构，例如kafka和pulsar就分离出CPU密集型的系统作为协调者来保证对I/O密集型系统的容错性、数据一致性以及系统对外请求响应的编排。而不是将其耦合在一起，让单个系统负担太多</p>
 </blockquote>
 <ul>
-<li>对于CPU密集型系统来说，因为CPU密集型一般来说都是不存储数据的系统（也可以称之为无状态的系统），它主要聚焦于计算能力，那么理论上分布式系统提供的可扩展性就可以保证在机器趋于无穷多是，计算能力也能够趋于无穷大。<blockquote>
+<li><p>对于CPU密集型系统来说，因为CPU密集型一般来说都是不存储数据的系统（也可以称之为无状态的系统），它主要聚焦于计算能力，那么理论上分布式系统提供的可扩展性就可以保证在机器趋于无穷多是，计算能力也能够趋于无穷大。</p>
+<blockquote>
 <p>这也是为什么要求日常开发的业务都应该保证是无状态服务</p>
 </blockquote>
 </li>
-<li>对于I&#x2F;O密集型来说，由于需要存储大量数据，所以数据一致性问题就尤为重要，如果用户得到的数据不一致，那么就算整个分布式系统拥有完美的容错机制，也是不可能上线使用的。</li>
+<li><p>对于I/O密集型来说，由于需要存储大量数据，所以数据一致性问题就尤为重要，如果用户得到的数据不一致，那么就算整个分布式系统拥有完美的容错机制，也是不可能上线使用的。</p>
+</li>
 </ul>
-<h2 id="三、四大话题-Topic"><a href="#三、四大话题-Topic" class="headerlink" title="三、四大话题 Topic"></a>三、四大话题 Topic</h2><p>在以上infrastructure的学习中，提到了实现中需要注意的诸多细节，而这些细节实际上都是围绕这以下四个话题展开的。当学习完以下四个话题，自然而然会对实现细节或者目标有更加深刻的理解。</p>
-<h3 id="1-可扩展性-Scalability"><a href="#1-可扩展性-Scalability" class="headerlink" title="1 可扩展性 Scalability"></a>1 可扩展性 Scalability</h3><p>对于可扩展性来说，实际上是在探究如何处理负载的问题，即如何通过添加资源来处理额外的负载。</p>
+<h2 id="三、四大话题-Topic"><a title="三、四大话题 Topic" class="headerlink" href="#三、四大话题-Topic"></a>三、四大话题 Topic</h2><p>在以上infrastructure的学习中，提到了实现中需要注意的诸多细节，而这些细节实际上都是围绕这以下四个话题展开的。当学习完以下四个话题，自然而然会对实现细节或者目标有更加深刻的理解。</p>
+<h3 id="1-可扩展性-Scalability"><a title="1 可扩展性 Scalability" class="headerlink" href="#1-可扩展性-Scalability"></a>1 可扩展性 Scalability</h3><p>对于可扩展性来说，实际上是在探究如何处理负载的问题，即如何通过添加资源来处理额外的负载。</p>
 <ul>
 <li><p><strong>负载参数</strong>的来源多种多样，取决于系统应用的体系结构是怎么样的。经典的参数有rt，qps，tps，pv uv，cache hit等等。</p>
 </li>
@@ -399,22 +401,22 @@
 </blockquote>
 <p>了解了负载参数和评判标准后，就可以考虑如何实现可扩展性，换句话说，就是学习如何将计算资源分配给机器，从而提升负载能力、平衡系统负载。</p>
 <ul>
-<li>对于可扩展性设计来说，实际上是一门<strong>平衡的艺术</strong>。在设计系统架构时，必须要考虑应用的定位、需求是什么，对于快速迭代的应用来说，也许在设计之初的架构和迭代几轮后的架构完全不同。对于刚刚起步的应用来说，快速迭代扩展业务、吸引用户才是一等公民，不应该将未知的扩展性放在首位。<blockquote>
+<li>对于可扩展性设计来说，实际上是一门<strong>平衡的艺术</strong>。在设计系统架构时，必须要考虑应用的定位、需求是什么，对于快速迭代的应用来说，也许在设计之初的架构和迭代几轮后的架构完全不同。对于刚刚起步的应用来说，快速迭代扩展业务、吸引用户才是一等公民，不应该将未知的扩展性放在首位。</li>
+</ul>
+<blockquote>
 <p>不过需要注意的是，对于一个普通的系统来说，基本上是难以支持其预设目标的10倍负载的。因此如果应用处于一个快速迭代并且可能存在大量潜在流量的阶段，那么就还是需要考虑是否需要设计一个高扩展性（以便自由提升性能）、高伸缩性（在不需要大量资源时，避免浪费）的系统。</p>
 </blockquote>
-</li>
-</ul>
 <p>对于具有可扩展性的系统来说，<strong>在增加其负载能力时，也间接的提高了系统的可靠性</strong>，因为随着机器处理能力的提升，故障出现的概率将会减少(例如不会出现负载过高，而无法提供服务的情况)，所以此时将提升系统的可用性。</p>
-<h3 id="2-可靠性-Reliability"><a href="#2-可靠性-Reliability" class="headerlink" title="2 可靠性 Reliability"></a>2 可靠性 Reliability</h3><p>可靠性即要求系统能够提供容错机制（fault-tolerant），而容错当中又可分出两个属性，<strong>可用性（Availability）和恢复性（Recoverability）</strong>。</p>
+<h3 id="2-可靠性-Reliability"><a title="2 可靠性 Reliability" class="headerlink" href="#2-可靠性-Reliability"></a>2 可靠性 Reliability</h3><p>可靠性即要求系统能够提供容错机制（fault-tolerant），而容错当中又可分出两个属性，<strong>可用性（Availability）和恢复性（Recoverability）</strong>。</p>
 <p>故障（fault）会出现两种情况，一是继续可用，只不过不能输出正常结果，另一种是不可用。</p>
 <ul>
 <li>对于继续可用，而输出不正确情况来说(这和降级修改输出不一样，它是由于被动造成意外输出的，所以需要进行失败处理)，我们就应该让他<strong>快速失败（fail fast）策略</strong>使其不可用。</li>
-<li>对于不可用的情况，一般来说为了保证高可用性，一般是将负载转移到另一台能够提供相同功能的机器上，即执行<strong>故障转移&#x2F;故障恢复策略</strong></li>
-<li>但是我们也需要考虑将这台故障机器修复重启的策略，这也是为什么需要保证系统需要拥有恢复性。<blockquote>
+<li>对于不可用的情况，一般来说为了保证高可用性，一般是将负载转移到另一台能够提供相同功能的机器上，即执行<strong>故障转移/故障恢复策略</strong></li>
+<li>但是我们也需要考虑将这台故障机器修复重启的策略，这也是为什么需要保证系统需要拥有恢复性。</li>
+</ul>
+<blockquote>
 <p>故障转移和故障恢复都是一个意思，即failover。</p>
 </blockquote>
-</li>
-</ul>
 <p>故障又会分为三类，一是硬件，二是软件，三是人为。具体情况就不展开讨论了。</p>
 <p>接下来思考以下如何实现容错机制。</p>
 <ul>
@@ -444,14 +446,16 @@
 <blockquote>
 <p>我个人理解的可靠性是比较宽泛的，即任何偏离正常轨迹运行的机器我都称之为不可靠。如果按我这个标准来理解的话，那么一致性实际上是可靠性的一个子话题。</p>
 </blockquote>
-<h3 id="3-一致性-Consistency"><a href="#3-一致性-Consistency" class="headerlink" title="3 一致性 Consistency"></a>3 一致性 Consistency</h3><p>一致性话题主要在于对于多个参与者来说，他们拥有的数据是一样的、一致性。对于分布式领域中提到的一致性来说，<strong>它更主要是解决数据由于延迟而造成的不一致</strong>。</p>
+<h3 id="3-一致性-Consistency"><a title="3 一致性 Consistency" class="headerlink" href="#3-一致性-Consistency"></a>3 一致性 Consistency</h3><p>一致性话题主要在于对于多个参与者来说，他们拥有的数据是一样的、一致性。对于分布式领域中提到的一致性来说，<strong>它更主要是解决数据由于延迟而造成的不一致</strong>。</p>
 <p>一致性这个名词实际上会涉及到很多不同的领域:</p>
 <ul>
-<li>对于数据复制来说，一般使用的是异步模型，因此这里将要强调的是最终一致性。又例如在CAP这个经验法则中，就有一个consistency，这里指的是强一致性。<blockquote>
+<li><p>对于数据复制来说，一般使用的是异步模型，因此这里将要强调的是最终一致性。又例如在CAP这个经验法则中，就有一个consistency，这里指的是强一致性。</p>
+<blockquote>
 <p>CAP对于帮助理解分布式系统十分有用，因为它将分布式中不可靠的问题简单的总结为了三个方面，并且给出了十分有用的AP、CP结论。但是对于搭建一个可靠的分布系统来说，它并没有太多用处。我们需要更加严谨的、分门别类的一致性模型来辅助我们构建一个能够完成我们需求的分布式系统。</p>
 </blockquote>
 </li>
-<li>对于事务来说，其中的ACID又涉及到consistency，但是这里的一致性和上述的一致性所提及的概念实际上是不一致性的。<ul>
+<li><p>对于事务来说，其中的ACID又涉及到consistency，但是这里的一致性和上述的一致性所提及的概念实际上是不一致性的。</p>
+<ul>
 <li><p>它指的是对于每一个事务来说，它应该保证事务提交之后，数据应该是完整明确的，不应该违反任何约束，进而导致数据库的不可用。换句话说，就是让数据库从一个有效状态转移到另一个有效状态。一致可以理解为——状态从头到尾都一样，都是有效的。</p>
 </li>
 <li><p>对于事务的一致性来说，它和数据库本身的关系并不大，该属性的实现更多的是依赖于应用层。换句话说，应用层有义务保证数据能够满足约束条件。例如你不能让余额变成负数。</p>
@@ -469,12 +473,12 @@
 <p>除开以上两种——事务、分布式——一致性，其实还有一种一致性概念，就是哈希一致性，它强调的是，多次哈希得到的都是相同的结果。这个一致性在此不做关注。</p>
 <p>在这方面，我们需要额外关注以下内容：</p>
 <ul>
-<li>同步&#x2F;异步的网络模型</li>
+<li>同步/异步的网络模型</li>
 <li>节点失效处理方式</li>
 <li>顺序性</li>
-<li>分布式共识（原子提交&#x2F;分布式事务、容错性共识算法）</li>
+<li>分布式共识（原子提交/分布式事务、容错性共识算法）</li>
 </ul>
-<h3 id="4-可维护性-Maintainability"><a href="#4-可维护性-Maintainability" class="headerlink" title="4 可维护性 Maintainability"></a>4 可维护性 Maintainability</h3><blockquote>
+<h3 id="4-可维护性-Maintainability"><a title="4 可维护性 Maintainability" class="headerlink" href="#4-可维护性-Maintainability"></a>4 可维护性 Maintainability</h3><blockquote>
 <p>俗话说的好，一个软件的生命周期大多都处于维护阶段，开发时间仅仅占据很小一部分，因此若想让一个软件能够进入生产环境，可维护性是一定需要考虑的。</p>
 </blockquote>
 <p>可维护性包括三部分：可运维性、简单性、可伸缩性</p>
@@ -508,7 +512,7 @@
 </li>
 </ul>
 <p>**在可维护性层面上，实际上我们已经几乎要脱离分布式底层构建，而开始转向用户体验方面之上了(运维人员也是用户)**，因此在讨论这一话题时，我们就能够十分明显的感受到分布式系统最终目标是多么的重要。</p>
-<h3 id="5-总结"><a href="#5-总结" class="headerlink" title="5 总结"></a>5 总结</h3><h4 id="5-1-回顾四个Topic"><a href="#5-1-回顾四个Topic" class="headerlink" title="5.1 回顾四个Topic"></a>5.1 回顾四个Topic</h4><p>在我看来，这四个大话题，实际上最重要的是可靠性和可扩展性，我认为它们确确实实适用于各种类型的分布式系统。我个人认为一致性对于那些无状态应用来说是不需要考虑的，但它是数据系统中必不可少的Topic。</p>
+<h3 id="5-总结"><a title="5 总结" class="headerlink" href="#5-总结"></a>5 总结</h3><h4 id="5-1-回顾四个Topic"><a title="5.1 回顾四个Topic" class="headerlink" href="#5-1-回顾四个Topic"></a>5.1 回顾四个Topic</h4><p>在我看来，这四个大话题，实际上最重要的是可靠性和可扩展性，我认为它们确确实实适用于各种类型的分布式系统。我个人认为一致性对于那些无状态应用来说是不需要考虑的，但它是数据系统中必不可少的Topic。</p>
 <blockquote>
 <p>虽然但是，一点状态都没有的应用实际上也不存在。对于Web开发来说，不管以何种架构来设计系统，一定会涉及到数据，典型的场景就是缓存的使用。而且对于今日的分布式系统来说，数据是必不可缺的，那么一致性也是不能够缺少的。</p>
 <p>实际上，分布式系统实现起来最难的部分也就是既要保证可靠性又要保证一致性。时至今日这也是一个值得深入研究讨论的话题。</p>
@@ -524,7 +528,7 @@
 </blockquote>
 <p>在实际构建系统的过程中，我们大多数可以按以上四个话题为角度来进行思考。分布式系统应该是灵活的，应该根据自己的需求调整处理优先级。</p>
 <p><strong>再次强调——在我们实现对应能力时，其实就是在拓展infrastructure向外提供的抽象能力。而我们需要保证的就是这些能力足以隐藏实现细节，做到对用户透明无感，开箱即用。</strong></p>
-<h4 id="5-2-Topic之下的应用"><a href="#5-2-Topic之下的应用" class="headerlink" title="5.2 Topic之下的应用"></a>5.2 Topic之下的应用</h4><p>对于分布式系统来说，主要话题就是以上提到的四个，而围绕着这四个话题，将会引出很多机制 策略 算法，在以上的论述中，都只是简单的了解一下。因此接下来我将会尽力补充那些细节，例如负载均衡，消息可靠性，数据分区，数据保序，事务，降级等等。而这些内容我将在今后学习，并记录下来。</p>
+<h4 id="5-2-Topic之下的应用"><a title="5.2 Topic之下的应用" class="headerlink" href="#5-2-Topic之下的应用"></a>5.2 Topic之下的应用</h4><p>对于分布式系统来说，主要话题就是以上提到的四个，而围绕着这四个话题，将会引出很多机制 策略 算法，在以上的论述中，都只是简单的了解一下。因此接下来我将会尽力补充那些细节，例如负载均衡，消息可靠性，数据分区，数据保序，事务，降级等等。而这些内容我将在今后学习，并记录下来。</p>
 
                 
               </div>
@@ -591,13 +595,13 @@
       
         <div class="license-meta-item license-meta-date">
           <div>发布于</div>
-          <div>2023年11月7日</div>
+          <div>2023年11月8日</div>
         </div>
       
       
         <div class="license-meta-item license-meta-date">
           <div>更新于</div>
-          <div>2023年11月7日</div>
+          <div>2023年11月8日</div>
         </div>
       
       
